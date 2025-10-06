@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Any, Optional, Type
+from typing import Any, Type
 
 
 class IntegerRange:
@@ -48,14 +48,10 @@ class Visitor:
 
 
 class SlideLimitationValidator(ABC):
-    """Базовий клас для валідаторів гірок (абстрактний)."""
-
-    def __init__(
-        self, age: Optional[int] = None,
-        weight: Optional[int] = None,
-        height: Optional[int] = None
-    ) -> None:
-        pass
+    def __init__(self, age: int, weight: int, height: int) -> None:
+        self.age = age
+        self.weight = weight
+        self.height = height
 
 
 class ChildrenSlideLimitationValidator(SlideLimitationValidator):
@@ -84,18 +80,8 @@ class Slide:
         self.limitation_class = limitation_class
 
     def can_access(self, visitor: Visitor) -> bool:
-        """Перевіряє, чи може відвідувач отримати доступ до гірки."""
-        # Створюємо екземпляр валідатора
-        validator_instance = self.limitation_class()
-
         try:
-            # Присвоєння значень викликає IntegerRange.__set__ для валідації
-            validator_instance.age = visitor.age
-            validator_instance.weight = visitor.weight
-            validator_instance.height = visitor.height
+            self.limitation_class(visitor.age, visitor.weight, visitor.height)
             return True
-
-        except (TypeError, ValueError) as e:
-            # Виводимо помилку валідації (опціонально)
-            print(f"Access denied to '{self.name}': {e}")
+        except (TypeError, ValueError):
             return False
