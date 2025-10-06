@@ -23,14 +23,14 @@ class IntegerRange:
         return getattr(instance, self.private_name)
 
     def __set__(self, instance: Any, value: int) -> None:
-        """Перевіряє та встановлює значення. Викликає помилки, якщо валідація не пройдена."""
         if not isinstance(value, int):
             raise TypeError("Value must be an integer")
 
         # E501: Рядок був розділений, щоб не перевищувати 79 символів
         if not (self.min_amount <= value <= self.max_amount):
             raise ValueError(
-                f"{self.public_name} must be between {self.min_amount} and {self.max_amount}"
+                f"{self.public_name} must be between {self.min_amount} "
+                f"and {self.max_amount}"
             )
         setattr(instance, self.private_name, value)
 
@@ -50,7 +50,11 @@ class Visitor:
 class SlideLimitationValidator(ABC):
     """Базовий клас для валідаторів гірок (абстрактний)."""
 
-    def __init__(self, age: Optional[int] = None, weight: Optional[int] = None, height: Optional[int] = None) -> None:
+    def __init__(
+        self, age: Optional[int] = None,
+        weight: Optional[int] = None,
+        height: Optional[int] = None
+    ) -> None:
         pass
 
 
@@ -72,7 +76,9 @@ class Slide:
     """Модель гірки, яка перевіряє доступність для відвідувача."""
 
     # E302: Додано два порожні рядки перед визначенням класу.
-    def __init__(self, name: str, limitation_class: Type[SlideLimitationValidator]) -> None:
+    def __init__(
+        self, name: str, limitation_class: Type[SlideLimitationValidator]
+    ) -> None:
         # E231: Додано пробіли після ком
         self.name = name
         self.limitation_class = limitation_class
