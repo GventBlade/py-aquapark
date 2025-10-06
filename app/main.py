@@ -20,7 +20,7 @@ class IntegerRange:
         """Отримує значення з екземпляра."""
         if instance is None:
             return self
-        return getattr(instance, self.private_name)
+        return getattr(instance, self.private_name, None)
 
     def __set__(self, instance: Any, value: int) -> None:
         if not isinstance(value, int):
@@ -83,5 +83,5 @@ class Slide:
         try:
             self.limitation_class(visitor.age, visitor.weight, visitor.height)
             return True
-        except (TypeError, ValueError):
+        except Exception:
             return False
